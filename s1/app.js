@@ -148,7 +148,7 @@ app.get('/messages/:mid/authors/:aid', async (req, res, next) => {
   try {
     const message = await Message.findByPk(req.params.mid)
     if (message) {
-      const authors = message.getAuthors({ where: {
+      const authors = await message.getAuthors({ where: {
         id: req.params.aid 
       }})
       const author = authors.shift()
@@ -169,7 +169,7 @@ app.put('/messages/:mid/authors/:aid', async (req, res, next) => {
   try {
     const message = await Message.findByPk(req.params.mid)
     if (message) {
-      const authors = message.getAuthors({ where: {
+      const authors = await message.getAuthors({ where: {
         id: req.params.aid 
       }})
       const author = authors.shift()
@@ -191,7 +191,7 @@ app.delete('/messages/:mid/authors/:aid', async (req, res, next) => {
   try {
     const message = await Message.findByPk(req.params.mid)
     if (message) {
-      const authors = message.getAuthors({ where: {
+      const authors = await message.getAuthors({ where: {
         id: req.params.aid 
       }})
       const author = authors.shift()
