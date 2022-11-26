@@ -144,11 +144,70 @@ app.post('/messages/:mid/authors', async (req, res, next) => {
   }
 })
 
-app.get('/messages/:mid/authors/:aid', async (req, res, next) => {})
+app.get('/messages/:mid/authors/:aid', async (req, res, next) => {
+  try {
+    const message = await Message.findByPk(req.params.mid)
+    if (message) {
+      const authors = message.getAuthors({ where: {
+        id: req.params.aid 
+      }})
+      const author = authors.shift()
+      if (author) {
+        res.status(200).json(author)
+      } else {
+        res.status(404).json({ message: 'not found' })
+      }
+    } else {
+      res.status(404).json({ message: 'not found' })
+    }
+  } catch (error) {
+    next(error)
+  }
+})
 
-app.put('/messages/:mid/authors/:aid', async (req, res, next) => {})
+app.put('/messages/:mid/authors/:aid', async (req, res, next) => {
+  try {
+    const message = await Message.findByPk(req.params.mid)
+    if (message) {
+      const authors = message.getAuthors({ where: {
+        id: req.params.aid 
+      }})
+      const author = authors.shift()
+      if (author) {
+        await author.update(req.body, { fields: ['name', 'email'] })
+        res.status(202).json(author)
+      } else {
+        res.status(404).json({ message: 'not found' })
+      }
+    } else {
+      res.status(404).json({ message: 'not found' })
+    }
+  } catch (error) {
+    next(error)
+  }
+})
 
-app.delete('/messages/:mid/authors/:aid', async (req, res, next) => {})
+app.delete('/messages/:mid/authors/:aid', async (req, res, next) => {
+  try {
+    const message = await Message.findByPk(req.params.mid)
+    if (message) {
+      const authors = message.getAuthors({ where: {
+        id: req.params.aid 
+      }})
+      const author = authors.shift()
+      if (author) {
+        await author.destroy()
+        res.status(202).json(author)
+      } else {
+        res.status(404).json({ message: 'not found' })
+      }
+    } else {
+      res.status(404).json({ message: 'not found' })
+    }
+  } catch (error) {
+    next(error)
+  }
+})
 
 app.use((error, req, res, next)  => {
   console.log(error)
